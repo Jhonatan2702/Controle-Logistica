@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Personalizado</title>
+    <!-- Importando CSS personalizado -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Filtros</h3>
+            </div>
+            <div class="card-body">
+                <form method="get" action="/">
+                    <div class="form-group">
+                        <label for="date">Data de Emissão:</label>
+                        <input type="text" id="date" name="date" class="form-control" placeholder="DD/MM/YYYY" value="{{ date_filter }}">
+                    </div>
+                    <button type="submit" name="filter" value="date" class="btn">Filtrar Data</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Registros do dia {{ date_filter }}</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Loja</th>
+                            <th>Código</th>
+                            <th>Prevenda</th>
+                            <th>Emissão</th>
+                            <th>Cliente</th>
+                            <th>Vendedor</th>
+                            <th>Entrega</th>
+                            <th>Informação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in registros %}
+                        <tr>
+                            <td>{{ row.LOJA }}</td>
+                            <td><a href="/?date={{ date_filter }}&code={{ row.CÓDIGO }}">{{ row.CÓDIGO }}</a></td>
+                            <td>{{ row.PREVENDA }}</td>
+                            <td>{{ row.EMISSÃO }}</td>
+                            <td>{{ row.CLIENTE }}</td>
+                            <td>{{ row.VENDEDOR }}</td>
+                            <td>{{ row.ENTREGA }}</td>
+                            <td>{{ row.INFORMAÇÃO }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Produtos</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>PLU</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in produtos %}
+                        <tr>
+                            <td>{{ row.CÓDIGO }}</td>
+                            <td>{{ row.PLU }}</td>
+                            <td>{{ row.PRODUTO }}</td>
+                            <td>{{ row.QUANTIDADE }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
