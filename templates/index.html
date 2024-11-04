@@ -62,10 +62,80 @@
 
         <div class="card">
             <div class="card-header">
+                <button onclick="imprimirProdutos()">Imprimir Produtos</button>
+
+                <script>
+                    function imprimirProdutos() {
+                        const tabelaElement = document.querySelector("#query_produtos");
+                        if (tabelaElement) {
+                            // Criação da nova tabela apenas com as colunas PLU, Produto e Quantidade
+                            let tabelaImpressao = `
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>PLU</th>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            `;
+                            
+                            // Loop para preencher as linhas da tabela de impressão
+                            const linhas = tabelaElement.querySelectorAll("tbody tr");
+                            linhas.forEach(linha => {
+                                const plu = linha.cells[1].innerText; // PLU está na segunda coluna (índice 1)
+                                const produto = linha.cells[2].innerText; // Produto está na terceira coluna (índice 2)
+                                const quantidade = linha.cells[3].innerText; // Quantidade está na quarta coluna (índice 3)
+                
+                                tabelaImpressao += `
+                                    <tr>
+                                        <td>${plu}</td>
+                                        <td>${produto}</td>
+                                        <td>${quantidade}</td>
+                                    </tr>
+                                `;
+                            });
+                
+                            tabelaImpressao += `
+                                    </tbody>
+                                </table>
+                            `;
+                
+                            const janelaImpressao = window.open("", "_blank");
+                
+                            janelaImpressao.document.write(`
+                                <html>
+                                    <head>
+                                        <title>Imprimir Produtos</title>
+                                        <style>
+                                            body { font-family: Arial, sans-serif; margin: 20px; }
+                                            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                                            th, td { padding: 10px; text-align: left; border: 1px solid #ddd; }
+                                            th { background-color: #f2f2f2; }
+                                            tr:nth-child(even) { background-color: #f9f9f9; }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <h1>Produtos Filtrados</h1>
+                                        ${tabelaImpressao}
+                                    </body>
+                                </html>
+                            `);
+                
+                            janelaImpressao.document.close();
+                            janelaImpressao.print();
+                        } else {
+                            console.error("Erro: A tabela de produtos não foi encontrada.");
+                        }
+                    }
+                </script>
+                
+            
                 <h3 class="card-title">Produtos</h3>
             </div>
             <div class="card-body">
-                <table class="table">
+                <table id="query_produtos" class="table">
                     <thead>
                         <tr>
                             <th>Código</th>

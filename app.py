@@ -77,6 +77,21 @@ def index():
 
     return render_template('index.html', registros=registros, produtos=produtos, date_filter=date_filter, code_filter=code_filter)
 
+
+@app.route('/imprimir_produtos')
+def imprimir_produtos():
+    produtos = obter_produtos_filtrados()  # Função que retorna a lista de produtos já filtrados
+    return render_template('impressao.html', produtos=produtos)
+def obter_produtos_filtrados():
+    # Aqui você deve implementar a lógica para obter os produtos filtrados
+    # Por exemplo, acessar o banco de dados e trazer os produtos com base no filtro atual
+    produtos = [
+        {'nome': 'Produto 1', 'quantidade': 10, 'preco': 15.0},
+        {'nome': 'Produto 2', 'quantidade': 5, 'preco': 25.0}
+    ]
+    return produtos
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 
