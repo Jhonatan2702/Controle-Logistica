@@ -70,12 +70,12 @@
                         if (tabelaElement) {
                             // Criação da nova tabela apenas com as colunas PLU, Produto e Quantidade
                             let tabelaImpressao = `
-                                <table>
+                                <table style="width: 100%; border-collapse: collapse;">
                                     <thead>
                                         <tr>
-                                            <th>PLU</th>
-                                            <th>Produto</th>
-                                            <th>Quantidade</th>
+                                            <th style="text-align: left; border-bottom: 1px solid #000; border-top: none;">PLU</th>
+                                            <th style="text-align: left; border-bottom: 1px solid #000; border-top: none;">Produto</th>
+                                            <th style="text-align: right; border-bottom: 1px solid #000; border-top: none;">Quantidade</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -83,6 +83,7 @@
                             
                             // Loop para preencher as linhas da tabela de impressão
                             const linhas = tabelaElement.querySelectorAll("tbody tr");
+                            const totalProdutos = linhas.length; // Total de produtos
                             linhas.forEach(linha => {
                                 const plu = linha.cells[1].innerText; // PLU está na segunda coluna (índice 1)
                                 const produto = linha.cells[2].innerText; // Produto está na terceira coluna (índice 2)
@@ -90,9 +91,9 @@
                 
                                 tabelaImpressao += `
                                     <tr>
-                                        <td>${plu}</td>
-                                        <td>${produto}</td>
-                                        <td>${quantidade}</td>
+                                        <td style="text-align: left; border: 1px solid #000; border-top: none;">${plu}</td>
+                                        <td style="text-align: left; border: 1px solid #000; border-top: none;">${produto}</td>
+                                        <td style="text-align: right; border: 1px solid #000; border-top: none;">${quantidade}</td>
                                     </tr>
                                 `;
                             });
@@ -102,35 +103,80 @@
                                 </table>
                             `;
                 
-                            const janelaImpressao = window.open("", "_blank");
+                            const dataImpressao = new Date().toLocaleString(); // Obtém a data e hora atual
                 
-                            janelaImpressao.document.write(`
+                            // Criar um elemento de impressão e injetar o HTML
+                            const conteudoImpressao = `
                                 <html>
                                     <head>
                                         <title>Imprimir Produtos</title>
                                         <style>
-                                            body { font-family: Arial, sans-serif; margin: 20px; }
-                                            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                                            th, td { padding: 10px; text-align: left; border: 1px solid #ddd; }
-                                            th { background-color: #f2f2f2; }
-                                            tr:nth-child(even) { background-color: #f9f9f9; }
+                                            body {
+                                                font-family: monospace; /* Usar uma fonte monoespaçada */
+                                                margin: 0; /* Remover margens */
+                                                padding: 0; /* Remover preenchimento */
+                                                width: 80mm; /* Largura do papel contínuo */
+                                            }
+                                            table {
+                                                width: 100%; /* Tabela ocupa 100% da largura */
+                                                border-collapse: collapse; /* Remover espaçamento entre bordas */
+                                                font-size: 14px; /* Tamanho da fonte */
+                                            }
+                                            th, td {
+                                                padding: 2px; /* Reduzir o espaçamento interno */
+                                            }
+                                            th {
+                                                text-align: left; /* Alinhamento à esquerda para cabeçalho */
+                                                font-weight: bold; /* Negrito para cabeçalho */
+                                            }
+                                            td {
+                                                text-align: left; /* Alinhamento à esquerda para os dados */
+                                            }
+                                            tr {
+                                                line-height: 1.2; /* Espaçamento entre linhas reduzido */
+                                            }
+                                            /* Estilo para o rodapé */
+                                            .footer {
+                                                margin-top: 5mm; /* Espaçamento acima do rodapé */
+                                                text-align: center; /* Centraliza o texto do rodapé */
+                                                font-size: 14px; /* Tamanho de fonte do rodapé */
+                                            }
                                         </style>
                                     </head>
                                     <body>
-                                        <h1>Produtos Filtrados</h1>
+                                        <h2 style="text-align: center; font-size: 14px; margin: 0;">Nome da Empresa</h2>
+                                        <p style="text-align: center; font-size: 12px; margin: 0;">Endereço da Empresa</p>
+                                        <p style="text-align: center; font-size: 12px; margin: 0;">CNPJ: 12.345.678/0001-99</p>
+                                        <p style="text-align: center; font-size: 12px; margin: 0;">Data e Hora: ${dataImpressao}</p>
+                                        <p style="text-align: center; font-size: 12px; margin: 0;">Total de Produtos: ${totalProdutos}</p>
+                                        <br> <!-- Espaço entre o cabeçalho e a tabela -->
+                                        <h3 style="text-align: center; font-size: 14px; margin: 0;">Itens</h3>
                                         ${tabelaImpressao}
+                                        <div class="footer">
+                                            <p style="margin: 0;">Obrigado pela preferência!</p>
+                                        </div>
                                     </body>
                                 </html>
-                            `);
+                            `;
                 
+                            // Criar uma nova janela para impressão
+                            const janelaImpressao = window.open('', '_blank');
+                
+                            // Escrever o conteúdo na nova janela
+                            janelaImpressao.document.write(conteudoImpressao);
                             janelaImpressao.document.close();
-                            janelaImpressao.print();
+                
+                            // Use setTimeout para esperar um momento antes de chamar a impressão
+                            setTimeout(() => {
+                                janelaImpressao.print();
+                                janelaImpressao.close(); // Fechar a janela após a impressão
+                            }, 500); // Atraso de 500ms
                         } else {
                             console.error("Erro: A tabela de produtos não foi encontrada.");
                         }
                     }
                 </script>
-                
+                                                                                
             
                 <h3 class="card-title">Produtos</h3>
             </div>
