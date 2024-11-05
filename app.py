@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import pyodbc
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -14,8 +15,14 @@ conn_str = (
 
 @app.route('/')
 def index():
-    date_filter = request.args.get('date', '15/10/2024')
+    date_filter = request.args.get('date', '2024-10-15')
     code_filter = request.args.get('code', '')
+
+    # Converte a data para o formato dd/mm/yyyy para a consulta SQL
+    try:
+        date_filter_sql = datetime.strptime(date_filter, '%Y-%m-%d').strftime('%d/%m/%Y')
+    except ValueError:
+        return "Formato de data inválido. Use yyyy-MM-dd."
 
     conn = pyodbc.connect(conn_str)
     cursor = conn.cursor()
@@ -42,13 +49,13 @@ def index():
         JOIN SysacME.dbo.CLIENTE CLIENTE ON CLIENTE.CLICOD = PREVENDA.CLICOD
         JOIN SysacME.dbo.AGENTE C ON C.AGECOD = CLIENTE.AGECOD
         JOIN SysacME.dbo.FUNCIONARIO D ON B.TRPFUNSOL = D.FUNCOD
-        WHERE B.TRPDATEMI = ?
+        WHERE CONVERT(VARCHAR, B.TRPDATEMI, 103) = ?
         GROUP BY A.LOJCOD, A.TRPCOD, B.TRPDATEMI, C.AGEDES, D.FUNDES, PREVENDA.PRVDATETG, PREVENDA.PRVINFCOMP, B.TRPOBS
         ORDER BY 
             OrdemEntrega ASC, 
             PREVENDA.PRVDATETG ASC
     '''
-    params = [date_filter]
+    params = [date_filter_sql]
 
     cursor.execute(query, params)
     registros = cursor.fetchall()
@@ -62,9 +69,9 @@ def index():
         JOIN SysacME.dbo.TRANSFERENCIA_PRODUTO B ON A.LOJCOD=B.LOJCOD AND A.TRPCOD=B.TRPCOD
         JOIN SysacME.dbo.REFERENCIA C ON A.REFPLU=C.REFPLU
         JOIN SysacME.dbo.FUNCIONARIO D ON B.TRPFUNSOL=D.FUNCOD
-        WHERE B.TRPDATEMI = ?
+        WHERE CONVERT(VARCHAR, B.TRPDATEMI, 103) = ?
     '''
-    params_produtos = [date_filter]
+    params_produtos = [date_filter_sql]
 
     if code_filter:
         query_produtos += ' AND CAST(A.TRPCOD AS INT) = ?'
@@ -94,4 +101,3 @@ def obter_produtos_filtrados():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
-

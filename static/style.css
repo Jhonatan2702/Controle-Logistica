@@ -3,11 +3,6 @@ body {
     background-color: #f4f6f9;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
 }
 
 .wrapper {
@@ -21,10 +16,9 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    padding: 20px;
 }
 
-.card-header {
+.card-header2 {
     background-color: #007bff;
     color: #fff;
     padding: 10px 15px;
@@ -39,7 +33,6 @@ body {
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 15px;
 }
 
 .table th, .table td {
@@ -53,11 +46,6 @@ body {
 }
 
 .btn {
-    display: inline-block;
-    font-weight: 400;
-    color: #212529;
-    text-align: center;
-    vertical-align: middle;
     cursor: pointer;
     background-color: #007bff;
     border: 1px solid #007bff;
@@ -71,4 +59,75 @@ body {
 .btn:hover {
     background-color: #0056b3;
     border-color: #0056b3;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card {
+    flex: 1;
+    margin: 10px;
+}
+
+.card-header {
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px 5px 0 0;
+    font-size: 1.25em;
+}
+
+.registros-container {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.produtos-container {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px; /* Ajuste a altura conforme necessário */
+    margin-right: 10px; /* Espaço entre a logomarca e o título */
+}
+
+.card-title {
+    text-align: center;
+    margin: 0; /* Remove a margem padrão */
+}
+
+.btn-green {
+    background-color: #28a745; /* Cor verde */
+    border: 1px solid #28a745;
+    color: #fff;
+    margin-left: 600px; /* Empurra o botão para a direita */
+}
+
+.btn-green:hover {
+    background-color: #218838; /* Cor verde mais escura ao passar o mouse */
+    border-color: #1e7e34;
+}
+
+.card-body1 {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-group {
+    flex: 1;
 }
